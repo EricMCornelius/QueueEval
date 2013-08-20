@@ -27,9 +27,9 @@ async.forEachSeries(config.test_cases, function(test, cb) {
 });
 
 function pre_hook(cb) {
-  var redis = require('redis');
-  var client = redis.createClient();
-  client.del('my-queue');
-  client.quit();
-  cb();
+  // var redis = require('redis');
+  // var client = redis.createClient();
+  // client.del('my-queue');
+  // client.quit();
+  // cb();
 }
