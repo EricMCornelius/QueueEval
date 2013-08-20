@@ -12,33 +12,33 @@
     },
     {
       "name": "single producer, multi consumer, small msg",
-      "iterations": 200,
+      "iterations": 10000,
       "producer_delay": 0,
       "consumer_delay": 0,
       "message_size": 32,
       "producers": 1,
       "consumers": 4,
-      "flush_interval": 1000
+      "flush_interval": 2000
     },
     {
       "name": "single producer, single consumer, medium msg",
-      "iterations": 200,
+      "iterations": 10000,
       "producer_delay": 0,
       "consumer_delay": 0,
       "message_size": 32,
       "producers": 1,
       "consumers": 1,
-      "flush_interval": 1000
+      "flush_interval": 2000
     },
     {
       "name": "single producer, multi consumer, medium msg",
-      "iterations": 200,
+      "iterations": 10000,
       "producer_delay": 0,
       "consumer_delay": 0,
       "message_size": 1024,
       "producers": 1,
       "consumers": 4,
-      "flush_interval": 1000
+      "flush_interval": 2000
     }
   ]
 }
