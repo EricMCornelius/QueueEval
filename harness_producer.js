@@ -2,7 +2,7 @@ var cluster = require('cluster'),
   config = require('config');
 	
 cluster.setupMaster({
-  exec: "./rabbit/producer/queue_producer.js",
+  exec: "./redis/producer/queue_producer.js",
   args: [],
   silent: false
 });

@@ -16,7 +16,7 @@ function start(config){
         // Receive messages
         q.subscribe(function (message) {
           // Print messages to stdout
-          console.log(message);
+          // console.log(message);
         });
     });
   });
@@ -27,7 +27,7 @@ function start(config){
   });
 
   connection.on('close', function() {
-    console.log('closed');
+    console.log('consumer closed');
   });
 }
 

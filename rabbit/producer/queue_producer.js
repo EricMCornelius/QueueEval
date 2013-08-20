@@ -3,6 +3,7 @@ var amqp = require('amqp'),
   async = require('async');
 
 function end_connection(conn) {
+  console.log('closing producer');
   conn.queue('tmp-' + Math.random(), function() {
     conn.end();
     
@@ -28,24 +29,27 @@ function start(config){
       var bufferMsg = new Buffer(config.message_size);
       bufferMsg.fill("q");
 
-      function sendMessage(cb) {
+      function sendMessage() {
         connection.exchange().publish('my-queue', { msg: bufferMsg.toString() });
-        cb();
       };
 
       if (delay !== 0) {
         var count = 0;
-        setInterval(function() {
+        var id = setInterval(function() {
           sendMessage();
           ++count;
-          if (count === messages)
+          console.log(count);
+          if (count === messages) {
             end_connection(connection);
+            clearInterval(id);
+          }
         }, delay);
       }
       else {
         var count = 0;
-        async.whilst(function() { ++count;  return count <= messages; }, 
-                     sendMessage, async.apply(end_connection, connection));
+        for (var i = 0; i < messages; ++i)
+          sendMessage();
+        end_connection(connection);
       }
 
     });
@@ -57,7 +61,7 @@ function start(config){
   });
 
   connection.on('close', function() {
-    console.log('close');
+    console.log('producer closed');
   });
 }
 

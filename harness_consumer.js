@@ -2,7 +2,7 @@ var cluster = require('cluster'),
   config = require('config');
 
 cluster.setupMaster({
-  exec: "./rabbit/consumer/queue_consumer.js",
+  exec: "./redis/consumer/queue_consumer.js",
   args: [],
   silent: false
 });
