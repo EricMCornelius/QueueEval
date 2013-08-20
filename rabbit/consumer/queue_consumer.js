@@ -1,4 +1,7 @@
-var amqp = require('amqp');
+var amqp = require('amqp'),
+  config = require('config');
+
+console.log(config);
 
 var connection = amqp.createConnection({ host: 'localhost' });
 
@@ -6,7 +9,6 @@ var connection = amqp.createConnection({ host: 'localhost' });
 connection.on('ready', function () {
   console.log('ready');
 
-  // Use the default 'amq.topic' exchange
   connection.queue('my-queue', function(q){
       // Catch all messages
       q.bind('#');

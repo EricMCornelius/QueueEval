@@ -1,9 +1,10 @@
-var amqp = require('amqp');
+var amqp = require('amqp'),
+  config = require('config');
 
 var connection = amqp.createConnection({ host: 'localhost' });
 
-var messages = 1000;
-var delay = 50;
+var messages = config.iterations;
+var delay = config.producer_delay;
 
 // Wait for connection to become established.
 connection.on('ready', function () {

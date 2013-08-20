@@ -1,0 +1,12 @@
+{
+  "test_cases": [
+    {
+      "iterations": 1000,
+      "producer_delay": 0,
+      "consumer_delay": 0,
+      "message_size": 1024,
+      "producers": 1,
+      "consumers": 1
+    }
+  ]
+}
