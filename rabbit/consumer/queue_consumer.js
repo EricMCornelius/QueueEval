@@ -1,17 +1,8 @@
 var amqp = require('amqp'),
-  cluster = require('cluster');
+  config = require('config');
 
 module.exports.start = function(config){
 
-  if (cluster.isMaster) {
-    for (var i = 0; i < config.consumers-1; i++) {
-      cluster.fork();
-    }
-
-    cluster.on('exit', function(worker, code, signal) {
-      console.log('worker ' + worker.process.pid + ' died');
-    });
-  }
   console.log("consumer start");
   var connection = amqp.createConnection({ host: 'localhost' });
 
@@ -40,3 +31,8 @@ module.exports.start = function(config){
     console.log('closed');
   });
 }
+
+var testId = process.env.test;
+console.log("consumer");
+console.log(testId);
+start(config.test_cases[testId]);

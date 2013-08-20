@@ -1,17 +1,7 @@
 var amqp = require('amqp'),
-  cluster = require('cluster');
+  config = require('config');
 
 module.exports.start = function(config){
-
-  if (cluster.isMaster) {
-    for (var i = 0; i < config.producers-1; i++) {
-      cluster.fork();
-    }
-
-    cluster.on('exit', function(worker, code, signal) {
-      console.log('worker ' + worker.process.pid + ' died');
-    });
-  }
 
   console.log("producer start");
   var connection = amqp.createConnection({ host: 'localhost' }),
@@ -52,3 +42,7 @@ module.exports.start = function(config){
     console.log('close');
   });
 }
+
+var testId = process.argv[0]
+start(config.test_cases[testId]);
+
