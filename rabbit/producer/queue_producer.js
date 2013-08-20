@@ -1,8 +1,7 @@
 var amqp = require('amqp'),
   config = require('config');
 
-module.exports.start = function(config){
-
+function start(config){
   console.log("producer start");
   var connection = amqp.createConnection({ host: 'localhost' }),
     messages = config.iterations,
@@ -43,6 +42,6 @@ module.exports.start = function(config){
   });
 }
 
-var testId = process.argv[0]
-start(config.test_cases[testId]);
+console.log(process.env.test);
+start(config.test_cases[process.env.test]);
 
