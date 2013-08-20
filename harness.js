@@ -31,5 +31,5 @@ function pre_hook(cb) {
   // var client = redis.createClient();
   // client.del('my-queue');
   // client.quit();
-  // cb();
+  cb();
 }
