@@ -11,7 +11,10 @@ function start(config){
 
     var count = 0;
     function receive() {
-      connection.blpop('my-queue', 0, function(err, message) {
+      connection.blpop('my-queue', 1, function(err, message) {
+        if (err || message === null)
+          process.exit();
+
         ++count;
         if (count % 100 === 0)
           console.log(count);

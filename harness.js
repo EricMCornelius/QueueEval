@@ -11,11 +11,17 @@ async.forEachSeries(config.test_cases, function(test, cb) {
     var producer = child_process.spawn('node', ['harness_producer'], {stdio: 'inherit'});
     var consumer = child_process.spawn('node', ['harness_consumer'], {stdio: 'inherit'});
 
+    var finished = 0;
     producer.on('exit', function() {
-      setTimeout(function() {
-        consumer.kill();
+      ++finished;
+      if (finished === 2)
         cb();
-      }, test.flush_interval);
+    });
+
+    consumer.on('exit', function() {
+      ++finished;
+      if (finished === 2)
+        cb();
     });
   });
 });
