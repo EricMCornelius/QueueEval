@@ -10,7 +10,7 @@ cluster.setupMaster({
 var config = config.test_cases[0];
 
 for(var i=0; i < config.consumers; i++) {
-  cluster.fork({test:0});
+  cluster.fork({test_index:process.env.test_index});
 }
 
 cluster.on('exit', function(worker, code, signal) {

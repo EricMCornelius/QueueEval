@@ -1,12 +1,24 @@
 {
   "test_cases": [
     {
+      "name": "single producer, single consumer",
       "iterations": 10,
       "producer_delay": 0,
       "consumer_delay": 0,
       "message_size": 8,
       "producers": 1,
-      "consumers": 2
+      "consumers": 1,
+      "flush_interval": 1000
+    },
+    {
+      "name": "single producer, multi consumer",
+      "iterations": 20,
+      "producer_delay": 0,
+      "consumer_delay": 0,
+      "message_size": 16,
+      "producers": 1,
+      "consumers": 4,
+      "flush_interval": 1000
     }
   ]
 }

@@ -1,5 +1,18 @@
 var amqp = require('amqp'),
-  config = require('config');
+  config = require('config'),
+  async = require('async');
+
+function end_connection(conn) {
+  conn.queue('tmp-' + Math.random(), function() {
+    conn.end();
+    
+    conn.once('error', function(e) {
+      if (e.code !== 'ECONNRESET' || e.syscall !== 'read')
+        throw e;
+      process.exit(0);
+    });
+  });
+}
 
 function start(config){
   console.log("producer start");
@@ -12,29 +25,35 @@ function start(config){
     console.log('producer ready');
 
     connection.queue('my-queue', function(q){
+      var bufferMsg = new Buffer(config.message_size);
+      bufferMsg.fill("q");
 
-      function sendMessage() {
-        var bufferMsg = new Buffer(config.message_size);
-        bufferMsg.fill("q");
-        connection.publish('my-queue', { msg: bufferMsg.toString() });
+      function sendMessage(cb) {
+        connection.exchange().publish('my-queue', { msg: bufferMsg.toString() });
+        cb();
       };
 
       if (delay !== 0) {
+        var count = 0;
         setInterval(function() {
           sendMessage();
+          ++count;
+          if (count === messages)
+            end_connection(connection);
         }, delay);
       }
       else {
-        for (var x = 0; x < messages; ++x)
-          sendMessage();
+        var count = 0;
+        async.whilst(function() { ++count;  return count <= messages; }, 
+                     sendMessage, async.apply(end_connection, connection));
       }
 
     });
   });
 
   connection.on('error', function(err) {
-    console.log('error');
-    console.log(err);
+    //console.log('error');
+    //console.log(err);
   });
 
   connection.on('close', function() {
@@ -42,6 +61,4 @@ function start(config){
   });
 }
 
-console.log(process.env.test);
-start(config.test_cases[process.env.test]);
-
+start(config.test_cases[process.env.test_index]);

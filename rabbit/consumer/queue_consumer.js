@@ -31,4 +31,4 @@ function start(config){
   });
 }
 
-start(config.test_cases[process.env.test]);
+start(config.test_cases[process.env.test_index]);
