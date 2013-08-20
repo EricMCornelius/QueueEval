@@ -16,6 +16,13 @@ async.forEachSeries(config.test_cases, function(test, cb) {
       ++finished;
       if (finished === 2)
         cb();
+      setTimeout(function () {
+        if (finished == 2)
+          return;
+        consumer.kill();
+        finished = 3;
+        cb();
+      }, test.flush_interval);
     });
 
     consumer.on('exit', function() {
