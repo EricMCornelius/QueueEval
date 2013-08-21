@@ -10,11 +10,11 @@ cluster.setupMaster({
 
 var count = 0;
 for(var i=0; i < config.producers; i++) {
-  var proc = cluster.fork({test_index:process.env.test_index});
+  var proc = cluster.fork();
   proc.on('message', function(msg) {
     count += msg.count;
 
-    if (count === config.iterations)
+    if (count === config.messages)
       process.exit();
   })
 }
