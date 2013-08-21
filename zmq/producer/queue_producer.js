@@ -5,7 +5,7 @@ function start(config) {
   connection.connect('tcp://127.0.0.1:6000');
   console.log("producer start");
   
-  var messages = config.iterations,
+  var messages = config.iterations / config.producers,
     delay = config.producer_delay;
 
   var bufferMsg = new Buffer(config.message_size);
@@ -18,7 +18,6 @@ function start(config) {
 
   function closeConnection() {
     connection.close();
-    process.exit();    
   }
 
   if (delay !== 0) {
@@ -26,7 +25,6 @@ function start(config) {
     var id = setInterval(function() {
       sendMessage();
       ++count;
-      console.log(count);
       if (count === messages) {
         clearInterval(id);
         closeConnection();

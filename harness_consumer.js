@@ -14,7 +14,7 @@ for(var i=0; i < config.consumers; i++) {
   proc.on('message', function(msg) {
     count += msg.count;
 
-    if (count % 100 === 0)
+    if (count % 1000 === 0)
       console.log(count);
 
     if (count === config.iterations)

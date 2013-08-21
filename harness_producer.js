@@ -13,6 +13,9 @@ for(var i=0; i < config.producers; i++) {
   var proc = cluster.fork({test_index:process.env.test_index});
   proc.on('message', function(msg) {
     count += msg.count;
+
+    if (count === config.iterations)
+      process.exit();
   })
 }
 

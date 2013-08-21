@@ -7,18 +7,22 @@ async.forEachSeries(config.test_cases, function(test, cb) {
   process.env.test = JSON.stringify(test);
 
   before_each(function() {
+    var start = new Date();
+
     var producer = child_process.spawn('node', ['harness_producer'], {stdio: 'inherit'});
     var consumer = child_process.spawn('node', ['harness_consumer'], {stdio: 'inherit'});
 
     var finished = 0;
     producer.on('exit', function() {
       ++finished;
+      console.log('Producer time:', new Date() - start);
       if (finished === 2)
         cb();
     });
 
     consumer.on('exit', function() {
       ++finished;
+      console.log('Consumer time:', new Date() - start);
       if (finished === 2)
         cb();
     });
