@@ -7,7 +7,7 @@ function start(config) {
       messages = config.messages / config.producers,
       delay = config.producer_delay;
   console.log("producer start");
-  
+
   // Wait for connection to become established.
   connection.on('ready', function () {
     console.log('producer ready');

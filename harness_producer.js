@@ -1,7 +1,7 @@
 var cluster = require('cluster');
 
 var config = JSON.parse(process.env.test);
-	
+
 cluster.setupMaster({
   exec: "./" + config.queue_type + "/producer/queue_producer.js",
   args: [],

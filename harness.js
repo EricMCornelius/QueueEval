@@ -58,7 +58,7 @@ async.forEachSeries(test_cases, function(test, cb) {
     start_proc('harness_producer');
     setTimeout(async.apply(start_proc, 'harness_consumer'), test.consumer_delay);
   });
-}); 
+});
 
 var zmq_queue;
 
@@ -74,6 +74,6 @@ function before_each(test, cb) {
       zmq_queue.kill();
     }
     zmq_queue = child_process.spawn('node', ['zmq/queue/queue_queue.js']);
-  }  
+  }
   cb();
 }
