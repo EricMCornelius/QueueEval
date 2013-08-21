@@ -8,7 +8,7 @@
       "message_size": 32,
       "producers": 1,
       "consumers": 1,
-      "flush_interval": 20000
+      "flush_interval": 2000
     },
     {
       "name": "single producer, multi consumer, small msg",

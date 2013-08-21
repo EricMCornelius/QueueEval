@@ -2,12 +2,11 @@ var child_process = require('child_process'),
   config = require('config'),
   async = require('async');
 
-var count = 0;
 async.forEachSeries(config.test_cases, function(test, cb) {
   console.log(test.name);
-  process.env.test_index = count++;
+  process.env.test = JSON.stringify(test);
 
-  pre_hook(function() {
+  before_each(function() {
     var producer = child_process.spawn('node', ['harness_producer'], {stdio: 'inherit'});
     var consumer = child_process.spawn('node', ['harness_consumer'], {stdio: 'inherit'});
 
@@ -16,13 +15,6 @@ async.forEachSeries(config.test_cases, function(test, cb) {
       ++finished;
       if (finished === 2)
         cb();
-      setTimeout(function () {
-        if (finished == 2)
-          return;
-        consumer.kill();
-        finished = 3;
-        cb();
-      }, test.flush_interval);
     });
 
     consumer.on('exit', function() {
@@ -33,10 +25,13 @@ async.forEachSeries(config.test_cases, function(test, cb) {
   });
 });
 
-function pre_hook(cb) {
-  // var redis = require('redis');
-  // var client = redis.createClient();
-  // client.del('my-queue');
-  // client.quit();
+function before_each(cb) {
+  if (config.redis) {
+    var redis = require('redis');
+    var client = redis.createClient();
+    client.del('my-queue');
+    client.quit();
+  }
+  
   cb();
 }

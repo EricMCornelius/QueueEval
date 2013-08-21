@@ -1,7 +1,5 @@
 var zmq = require('zmq'),
-  config = require('config'),
   connection = zmq.socket('push');
-
 
 function start(config) {
   connection.connect('tcp://127.0.0.1:6000');
@@ -10,18 +8,16 @@ function start(config) {
   var messages = config.iterations,
     delay = config.producer_delay;
 
-  console.log('producer ready');
-
   var bufferMsg = new Buffer(config.message_size);
   bufferMsg.fill("q");
 
   function sendMessage() {
     connection.send(bufferMsg.toString());
+    process.send({count:1});
   }
 
   function closeConnection() {
     connection.close();
-    console.log('producer closed');
     process.exit();    
   }
 
@@ -45,4 +41,5 @@ function start(config) {
   }
 }
 
-start(config.test_cases[process.env.test_index]);
+var config = JSON.parse(process.env.test);
+start(config);
