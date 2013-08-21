@@ -31,7 +31,7 @@ function start(config){
       bufferMsg = bufferMsg.toString();
 
       function sendMessage() {
-        connection.exchange().publish('my-queue', { msg: bufferMsg });
+        connection.publish('my-queue', { msg: bufferMsg });
         process.send({count: 1});
       };
 
