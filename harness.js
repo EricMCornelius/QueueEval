@@ -18,7 +18,7 @@ var consumer_delays = [0, 1000];
 var num_messages = [50000];
 var num_producers = [1, 4];
 var num_consumers = [1, 4];
-var queue_types = ['redis'];
+var queue_types = ['rabbit'];
 var production_strategies = ['passthrough'];
 var consumption_strategies = ['passthrough'];
 

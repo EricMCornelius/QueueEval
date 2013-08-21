@@ -21,7 +21,7 @@ function start(config) {
 
     var bufferMsg = new Buffer(config.message_size);
     bufferMsg.fill("q");
-    bufferMsg = bufferMsg.toString()
+    bufferMsg = bufferMsg.toString();
 
     for (var i = 0; i <= messages; ++i)
       sendMessage();

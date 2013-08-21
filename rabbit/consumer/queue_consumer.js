@@ -1,5 +1,5 @@
 var amqp = require('amqp'),
-  config = require('config');
+  strategies = require(process.cwd() + '/strategies/consumer_strategies');
 
 function start(config){
   console.log("consumer start");
@@ -9,26 +9,19 @@ function start(config){
   connection.on('ready', function () {
     console.log('consumer ready');
 
-    connection.queue('my-queue', function(q){
-        // Catch all messages
-        q.bind('#');
+    connection.queue('my-queue', function(q) {
+      // Catch all messages
+      q.bind('#');
 
-        // Receive messages
-        q.subscribe(function (message) {
-          // Print messages to stdout
-          // console.log(message);
+      // Receive messages
+      q.subscribe(function (message) {
+        strategy(function() {
+          process.send({count: 1});
         });
+      });
     });
-  });
-
-  connection.on('error', function(err) {
-    console.log('error');
-    console.log(err);
-  });
-
-  connection.on('close', function() {
-    console.log('consumer closed');
   });
 }
 
-start(config.test_cases[process.env.test_index]);
+var config = JSON.parse(process.env.test);
+start(config);
