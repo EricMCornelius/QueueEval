@@ -3,7 +3,7 @@ var cluster = require('cluster');
 var config = JSON.parse(process.env.test);
 
 cluster.setupMaster({
-  exec: "./zmq/consumer/queue_consumer.js",
+  exec: "./" + config.queue_type + "/consumer/queue_consumer.js",
   args: [],
   silent: false
 });

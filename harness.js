@@ -18,7 +18,7 @@ var consumer_delays = [0, 1000];
 var num_messages = [50000];
 var num_producers = [1, 4];
 var num_consumers = [1, 4];
-var queue_types = ['zeromq'];
+var queue_types = ['redis'];
 var production_strategies = ['passthrough'];
 var consumption_strategies = ['passthrough'];
 
@@ -58,7 +58,9 @@ async.forEachSeries(test_cases, function(test, cb) {
     start_proc('harness_producer');
     setTimeout(async.apply(start_proc, 'harness_consumer'), test.consumer_delay);
   });
-});
+}); 
+
+var zmq_queue;
 
 function before_each(test, cb) {
   if (test.queue_type === 'redis') {
@@ -67,6 +69,11 @@ function before_each(test, cb) {
     client.del('my-queue');
     client.quit();
   }
-  
+  if (test.queue_type === 'zmq') {
+    if (!_.isUndefined(zmq_queue)) {
+      zmq_queue.kill();
+    }
+    zmq_queue = child_process.spawn('node', ['zmq/queue/queue_queue.js']);
+  }  
   cb();
 }

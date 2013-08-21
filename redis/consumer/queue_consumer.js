@@ -1,37 +1,27 @@
 var redis = require('redis'),
-  config = require('config');
+  strategies = require(process.cwd() + '/strategies/consumer_strategies');
 
-function start(config){
-  console.log("consumer start");
+function start(config) {
+  var strategy = strategies[config.consumption_strategy];
   var connection = redis.createClient();
+
+  console.log("consumer start");
 
   // Wait for connection to become established.
   connection.on('ready', function () {
     console.log('consumer ready');
 
-    var count = 0;
     function receive() {
       connection.blpop('my-queue', 1, function(err, message) {
-        if (err || message === null)
-          process.exit();
-
-        ++count;
-        if (count % 100 === 0)
-          console.log(count);
-        receive();
+        strategy(function() {
+          process.send({count: 1});
+          receive();
+        });
       });
     }
     receive();
   });
-
-  connection.on('error', function(err) {
-    console.log('error');
-    console.log(err);
-  });
-
-  connection.on('end', function() {
-    console.log('consumer closed');
-  });
 }
 
-start(config.test_cases[process.env.test_index]);
+var config = JSON.parse(process.env.test);
+start(config);
