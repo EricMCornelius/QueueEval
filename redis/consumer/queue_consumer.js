@@ -11,15 +11,15 @@ function start(config) {
   connection.on('ready', function () {
     console.log('consumer ready');
 
-    function receive() {
+    function receiveMessage() {
       connection.blpop('my-queue', 1, function(err, message) {
         strategy(function() {
           process.send({count: 1});
-          receive();
+          receiveMessage();
         });
       });
     }
-    receive();
+    receiveMessage();
   });
 }
 

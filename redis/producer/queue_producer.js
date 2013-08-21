@@ -12,18 +12,22 @@ function start(config) {
   connection.on('ready', function () {
     console.log('producer ready');
 
-    var bufferMsg = new Buffer(config.message_size);
-    bufferMsg.fill("q");
-    bufferMsg = bufferMsg.toString()
-
     function sendMessage() {
       strategy(function() {
         connection.rpush('my-queue', bufferMsg);
         process.send({count:1});
-        sendMessage();
       });
     }
-    sendMessage();
+
+    var bufferMsg = new Buffer(config.message_size);
+    bufferMsg.fill("q");
+    bufferMsg = bufferMsg.toString()
+
+    for (var i = 0; i <= messages; ++i)
+      sendMessage();
+
+    connection.end();
+
   });
 }
 
